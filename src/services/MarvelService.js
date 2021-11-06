@@ -22,6 +22,7 @@ class MarvelService {
     }
 
     _transformCharacter = (character) => {
+        
         let des = ''
         
         if (character.description.length > 150) {
