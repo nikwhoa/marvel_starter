@@ -5,44 +5,33 @@ import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
 
-    // constructor(props) {
-    //     super(props);
-    //     this.updateChar();
-    // }
-
-    state = {
-        name: null,
-        description: null,
-        thumbnail: null,
-        homepage: null,
-        wiki: null
+    constructor(props) {
+        super(props);
+        this.updateChar();
     }
 
-    marvelServices = new MarvelService();
-    
-    
-    
-    // updateChar = () => {
-    //     const id = 1011005;
+    state = {
+        char: {}
+    }
 
-    //     this.MarvelService
-    //         .getCharacter(id)
-    //         .then(res => {
-    //             this.setState({
-    //                 name: res.data.results[0].name,
-    //                 description: res.data.results[0].description,
-    //                 thumbnail: res.data.results[0].thumbnail.path + '.' + res.data.results[0].thumbnail.extension,
-    //                 homepage: res.data.results[0].urls[0].url,
-    //                 wiki: res.data.results[0].urls[1].url
-    //             })
-    //         })
-    // }
+    marvelService = new MarvelService();
+    
+    onCharLoaded = (char) => {
+        this.setState({char}) // this.setState({char: char}) то же самое 
+    } 
+    
+    updateChar = () => {
+        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
+        this.marvelService
+            .getCharacter(id)
+            .then(this.onCharLoaded)
+    }
 
     
     render() {
-        const { name, description, thumbnail, homepage, wiki } = this.state
+        const { char: {name, description, thumbnail, homepage, wiki} } = this.state
         
-        this.marvelServices.getCharacter(1011005).then(item => console.log(item))
+        
         
         return (
             <div className="randomchar">
