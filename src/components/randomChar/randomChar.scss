@@ -59,4 +59,18 @@
         bottom: 14px;
         right: -37px;
     }
+    .loading-spinner {
+        display: block;
+        position: relative;
+        top: 35%;
+        left: 45%;
+        // margin:  0 auto;
+    }
+    .error-message {
+        display: block;
+        position: relative;
+        top: 10%;
+        left: 30%;
+    }
+    
 }
