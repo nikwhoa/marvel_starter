@@ -28,6 +28,8 @@ class MarvelService {
         if (character.description.length > 150) {
             des = character.description.slice(0, 150) + '...'
         }
+
+        
         
         return {
             name: character.name,
