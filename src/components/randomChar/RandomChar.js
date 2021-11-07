@@ -18,12 +18,12 @@ class RandomChar extends Component {
 
     componentDidMount() {
         this.updateChar();
-        console.log('mount RandomChar');
+        // console.log('mount RandomChar');
         // this.onRandomChar();
         // this.timerId = setInterval(this.updateChar, 33000)
     }
     componentDidUpdate() {
-        console.log('update RandomChar');
+        // console.log('update RandomChar');
     }
     onRandomChar = () => {
         this.setState({loading: true})

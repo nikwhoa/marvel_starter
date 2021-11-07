@@ -29,14 +29,16 @@ class MarvelService {
             des = character.description.slice(0, 150) + '...'
         }
 
-        
+        // let characterComics = character.comics.items.map((item, i) => i < 5 ? item.name : null)
         
         return {
+            id: character.id,
             name: character.name,
             description: des,
             thumbnail: character.thumbnail.path + '.' + character.thumbnail.extension,
             homepage: character.urls[0].url,
-            wiki: character.urls[1].url
+            wiki: character.urls[1].url,
+            comics: character.comics.items.map((item, i) => i < 9 ? item.name : null)
         }
     }
 
