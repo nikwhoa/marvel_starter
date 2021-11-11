@@ -3,6 +3,7 @@ import MarvelService from '../../services/MarvelService';
 import './charList.scss';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
+import PropTypes from 'prop-types';
 
 class CharList extends Component {
 
@@ -11,7 +12,7 @@ class CharList extends Component {
         loading: true,
         error: false,
         newItemLoading: false,
-        offset: 1548,
+        offset: 240,
         charEnded: false
     }
 
@@ -86,7 +87,7 @@ class CharList extends Component {
     render() {
 
         const { charList, loading, error, newItemLoading, offset, charEnded } = this.state
-        console.log(this.state);
+        // console.log(this.props);
         const items = this.renderItems(charList);
 
         const errorMessage = error ? <ErrorMessage /> : null
@@ -113,24 +114,9 @@ class CharList extends Component {
 
 }
 
-// const View = ({ char, updateId }) => {
-//     const charItem = char.map(item => {
-//         return (
-//             <li key={item.id}
-//             className="char__item"
-//             onClick={() => updateId(item.id)}>
-//                 <img style={item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? { objectFit: 'contain' } : null} src={item.thumbnail} alt={item.name} />
-//                 <div className="char__name">{item.name}</div>
-//             </li>
-//         )
-//     })
 
-//     return (
-//         <>
-//             {charItem}
-//         </>
-//     )
-// }
-
+CharList.propTypes = {
+    updateId: PropTypes.number
+}
 
 export default CharList;
