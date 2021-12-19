@@ -88,6 +88,7 @@ class CharList extends Component {
 
         const { charList, loading, error, newItemLoading, offset, charEnded } = this.state
         // console.log(this.props);
+        console.log(charList)
         const items = this.renderItems(charList);
 
         const errorMessage = error ? <ErrorMessage /> : null
