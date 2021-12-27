@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useEffect, useState } from 'react';
 
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
@@ -8,77 +8,67 @@ import PropTypes from 'prop-types';
 import './charInfo.scss';
 import Skeleton from '../skeleton/Skeleton';
 
-class CharInfo extends Component {
+const CharInfo = (props) => {
+    
+    const [char, setChar] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
 
-    state = {
-        char: null,
-        loading: false,
-        error: false
+    const marvelService = new MarvelService();
+
+    useEffect(() => {
+        updateChar(props.charId);
+    }, [props.charId])
+
+    // componentDidUpdate(prevProps) {
+    //     if (this.props.charId !== prevProps.charId) {
+    //         this.updateChar()
+    //     }
+    // }
+
+    const onCharLoaded = (char) => {
+        setChar(char)
+        setLoading(false)
     }
 
-    marvelService = new MarvelService();
-
-
-    componentDidMount() {
-        this.updateChar()
+    const onError = () => {
+        setError(true)
+        setLoading(false)
     }
 
-    componentDidUpdate(prevProps) {
-        // this.updateChar()
-        if (this.props.charId !== prevProps.charId) {
-            this.updateChar()
-        }
+    const onCharLoading = () => {
+        setLoading(true)
     }
 
-    onCharLoaded = (char) => {
-        this.setState({ char, loading: false }) // this.setState({char: char}) то же самое 
-    }
-
-    onError = () => {
-        this.setState({ loading: false, error: true })
-    }
-
-    onCharLoading = () => {
-        this.setState({ loading: true })
-    }
-
-    updateChar = () => {
-        const { charId } = this.props
-        if (!charId) {
+    const updateChar = (id) => {
+        if (!id) {
             return
         }
-        this.onCharLoading()
-        this.marvelService
-            .getCharacter(charId)
-            .then(this.onCharLoaded)
-            .catch(this.onError)
+        onCharLoading()
+        marvelService.getCharacter(id).then(onCharLoaded).catch(onError)
     }
 
-    componentDidCatch(err, info) {
-        console.log(err, info);
-        this.setState({
-            error: true
-        })
-    }
+    // componentDidCatch(err, info) {
+    //     console.log(err, info);
+    //     this.setState({
+    //         error: true
+    //     })
+    // }
 
-    render() {
+    const skeleton = char || loading || error ? null : <Skeleton />
+    const errorMessage = error ? <ErrorMessage /> : null
+    const spinner = loading ? <Spinner /> : null
+    const content = !(loading || error || !char) ? <View char={char} /> : null
 
-        const { char, loading, error } = this.state
+    return (
+        <div className="char__info">
+            {skeleton}
+            {errorMessage}
+            {spinner}
+            {content}
+        </div>
+    )
 
-        const skeleton = char || loading || error ? null : <Skeleton />
-        const errorMessage = error ? <ErrorMessage /> : null
-        const spinner = loading ? <Spinner /> : null
-        const content = !(loading || error || !char) ? <View char={char} /> : null
-
-        return (
-            <div className="char__info">
-                {skeleton}
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        )
-    }
 }
 
 const View = ({ char }) => {
@@ -90,8 +80,8 @@ const View = ({ char }) => {
     return (
         <>
             <div className="char__basics">
-                <img src={thumbnail} alt={name} 
-                style={thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? { objectFit: 'contain' } : null} />
+                <img src={thumbnail} alt={name}
+                    style={thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? { objectFit: 'contain' } : null} />
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">
@@ -109,8 +99,8 @@ const View = ({ char }) => {
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
-                { comics.length === 0 ? 'There are no comics' :
-                       
+                {comics.length === 0 ? 'There are no comics' :
+
                     comics.map((item, i) => {
                         return (
                             <li key={i} className="char__comics-item">
