@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import './charList.scss';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
@@ -8,30 +8,24 @@ import PropTypes from 'prop-types';
 const CharList = (props) => {
 
     const [charList, setCharList] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [offset, setOffset] = useState(240)
     const [charEnded, setCharEnded] = useState(false)
 
 
-    const marvelService = new MarvelService();
+    const { error, loading, getAllCharacters, getCharacter } = useMarvelService()
+
 
     useEffect(() => {
         onRequest()
     }, [])
 
-    const onError = () => {
-        setError(true)
-        setLoading(loading => false)
-    }
 
     const onRequest = (offset) => {
         onCharListLoading()
-        marvelService
-            .getAllCharacters(offset)
-            .then(onCharListLoaded)
-            .catch(onError)
+        
+        getAllCharacters(offset).then(onCharListLoaded)
+
     }
 
     const onCharListLoading = () => {
@@ -46,7 +40,6 @@ const CharList = (props) => {
         }
 
         setCharList(charList => [...charList, ...newCharList])
-        setLoading(loading => false)
         setNewItemLoading(newItemLoading => false)
         setOffset(offset => offset + 9)
         setCharEnded(charEnded => ended)
