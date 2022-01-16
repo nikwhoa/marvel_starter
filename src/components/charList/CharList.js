@@ -9,7 +9,7 @@ const CharList = (props) => {
 
     const [charList, setCharList] = useState([])
     const [newItemLoading, setNewItemLoading] = useState(false)
-    const [offset, setOffset] = useState(240)
+    const [offset, setOffset] = useState(210)
     const [charEnded, setCharEnded] = useState(false)
 
 
@@ -17,30 +17,25 @@ const CharList = (props) => {
 
 
     useEffect(() => {
-        onRequest()
+        onRequest(offset, true)
     }, [])
 
 
-    const onRequest = (offset) => {
-        onCharListLoading()
-        
+    const onRequest = (offset, initial) => {
+        initial ? setNewItemLoading(false) : setNewItemLoading(true)
         getAllCharacters(offset).then(onCharListLoaded)
-
     }
 
-    const onCharListLoading = () => {
-        setNewItemLoading(true)
-    }
 
     const onCharListLoaded = (newCharList) => {
         let ended = false
-
+        console.log(charList);
         if (newCharList.length < 9) {
             ended = true
         }
 
         setCharList(charList => [...charList, ...newCharList])
-        setNewItemLoading(newItemLoading => false)
+        setNewItemLoading(false)
         setOffset(offset => offset + 9)
         setCharEnded(charEnded => ended)
     }
@@ -69,15 +64,15 @@ const CharList = (props) => {
 
     const items = renderItems(charList);
     const errorMessage = error ? <ErrorMessage /> : null
-    const spinner = loading ? <Spinner /> : null
-    const content = !(loading || error) ? items : null
+    const spinner = loading && !newItemLoading ? <Spinner /> : null
+    
 
     return (
         <div className="char__list">
             <ul className="char__grid">
                 {errorMessage}
                 {spinner}
-                {content}
+                {items}
             </ul>
             <button
                 disabled={newItemLoading}

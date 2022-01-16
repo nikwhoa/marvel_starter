@@ -2,7 +2,7 @@ import { useHttp } from "../hooks/http.hook"
 
 const useMarvelService = () => {
 
-    const {loading, request, error} = useHttp()
+    const {loading, request, error, clearError} = useHttp()
 
     const _apiBase = 'https://gateway.marvel.com:443/v1/public/'
     const _apiKey = 'apikey=bbdd95157486e54b3b7994bb52bb4218'
@@ -37,7 +37,7 @@ const useMarvelService = () => {
             comics: character.comics.items.map((item, i) => i < 9 ? item.name : null)
         }
     }
-    return {loading, error, getAllCharacters, getCharacter}
+    return {loading, error, getAllCharacters, getCharacter, clearError}
 }
 
 export default useMarvelService;
