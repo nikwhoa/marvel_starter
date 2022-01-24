@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/App';
+import ComicsList from './components/comicsList/ComicsList';
 import './style/style.scss';
 
 
@@ -9,7 +10,8 @@ import './style/style.scss';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <ComicsList />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,4 +1,27 @@
 .comics {
+    
+    &__banner {
+        margin: 45px 0;
+        height: 100px;
+        background: #232222;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .banner {
+            &__avengers {
+                padding-left: 50px;
+            }
+            &__newcomics {
+                padding-left: 50px;
+                width: 25%;
+                color: white;
+            }
+            &__logo {
+                margin-left: auto;
+                margin-right: 30px;
+            }
+        }
+    }
     &__list {
         margin-top: 45px;
     }

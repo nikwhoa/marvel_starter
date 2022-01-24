@@ -37,7 +37,15 @@ const useMarvelService = () => {
             comics: character.comics.items.map((item, i) => i < 9 ? item.name : null)
         }
     }
-    return {loading, error, getAllCharacters, getCharacter, clearError}
+
+    const getComics = async (offset = 300) => {
+        const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`)
+        const comics = res.data.results
+        
+        return comics
+    }
+
+    return {loading, error, getAllCharacters, getCharacter, clearError, getComics}
 }
 
 export default useMarvelService;
