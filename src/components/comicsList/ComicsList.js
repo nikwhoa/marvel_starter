@@ -60,7 +60,6 @@ const ComicsList = () => {
     return (
 
         <div className="comics__list app">
-            <AppHeader />
             <CommicsBanner />
             {errorMessage}
             {spinner}
