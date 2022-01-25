@@ -10,51 +10,62 @@ import Spinner from '../spinner/spinner';
 
 const ComicsList = () => {
 
-    const [comics, setComics] = useState(null)
+    const [comics, setComics] = useState([])
     const [offset, setOffset] = useState(300)
+    const [newItems, setNewItems] = useState(false)
 
-    const { loading, error, clearError, getComics } = useMarvelService();
+
+    const { loading, error, getComics } = useMarvelService();
 
     useEffect(() => {
-        loadComics()
+        onRequest(offset, true)
     }, [])
+
+    const onRequest = (offset, initial) => {
+        initial ? setNewItems(false) : setNewItems(true)
+        getComics(offset).then(onComicsLoaded)
+    }
 
     const onComicsLoaded = (newComics) => {
         setComics(comics => [...comics, ...newComics])
-    }
-
-    const loadComics = () => {
-        clearError()
-        getComics().then(data => setComics(data))
-    }
-
-    const loadMore = () => {
-        clearError()
-        getComics(offset + 9).then(onComicsLoaded)
-        setOffset(offset + 9)
+        setNewItems(false)
+        setOffset(offset + 8)
     }
 
 
+    function renderItems(arr) {
+        const items = arr.map((item, i) => {
+            return (
+                <li key={item.title + '_' + i} className="comics__item">
+                    <a href={item.urls[0].url} target='_blank' rel="noreferrer">
+                        <img src={item.thumbnail.path + '.jpg'} alt="ultimate war" className="comics__item-img" />
+                        <div className="comics__item-name">{item.title}</div>
+                        <div className="comics__item-price">{item.prices[0].price}$</div>
+                    </a>
+                </li>
+            )
+        })
+
+        return (
+            <ul className="comics__grid">
+                {items}
+            </ul>
+        )
+    }
+
+    const items = renderItems(comics)
     const errorMessage = error ? <ErrorMessage /> : null
-    const spinner = loading ? <Spinner /> : null
-    const content = !(loading || error || !comics) ? comics.map((item, i) => <li key={item.title+'_'+i} className="comics__item">
-        <a href={item.urls[0].url} target='_blank' rel="noreferrer">
-            <img src={item.thumbnail.path+'.jpg'} alt="ultimate war" className="comics__item-img" />
-            <div className="comics__item-name">{item.title}</div>
-            <div className="comics__item-price">{item.prices[0].price}$</div>
-        </a>
-    </li>) : null
+    const spinner = loading && !newItems ? <Spinner /> : null
+   
     return (
 
         <div className="comics__list app">
             <AppHeader />
             <CommicsBanner />
-            <ul className="comics__grid">
-                {errorMessage}
-                {spinner}
-                {content}
-            </ul>
-            <button onClick={loadMore} className="button button__main button__long">
+            {errorMessage}
+            {spinner}
+            {items}
+            <button onClick={() => onRequest(offset)} className="button button__main button__long">
                 <div className="inner">load more</div>
             </button>
         </div>

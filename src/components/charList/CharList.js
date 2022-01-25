@@ -13,7 +13,7 @@ const CharList = (props) => {
     const [charEnded, setCharEnded] = useState(false)
 
 
-    const { error, loading, getAllCharacters, getCharacter } = useMarvelService()
+    const { error, loading, getAllCharacters } = useMarvelService()
 
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const CharList = (props) => {
 
     const onCharListLoaded = (newCharList) => {
         let ended = false
-        console.log(charList);
+        
         if (newCharList.length < 9) {
             ended = true
         }
