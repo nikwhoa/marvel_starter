@@ -7,6 +7,7 @@ import useMarvelService from '../../services/MarvelService';
 import { useEffect, useState } from 'react';
 import ErrorMessage from '../errorMessage/errorMessage';
 import Spinner from '../spinner/spinner';
+import { Link } from 'react-router-dom';
 
 const ComicsList = () => {
 
@@ -37,11 +38,12 @@ const ComicsList = () => {
         const items = arr.map((item, i) => {
             return (
                 <li key={item.title + '_' + i} className="comics__item">
-                    <a href={item.urls[0].url} target='_blank' rel="noreferrer">
+                    {/* href={item.urls[0].url} */}
+                    <Link to={`/comics/${item.id}`} >
                         <img src={item.thumbnail.path + '.jpg'} alt="ultimate war" className="comics__item-img" />
                         <div className="comics__item-name">{item.title}</div>
                         <div className="comics__item-price">{item.prices[0].price}$</div>
-                    </a>
+                    </Link>
                 </li>
             )
         })
