@@ -58,7 +58,7 @@ const ComicsList = () => {
     const items = renderItems(comics)
     const errorMessage = error ? <ErrorMessage /> : null
     const spinner = loading && !newItems ? <Spinner /> : null
-   
+    
     return (
 
         <div className="comics__list app">
