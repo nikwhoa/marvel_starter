@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import useMarvelService from '../../services/MarvelService';
 import './charList.scss';
 import Spinner from '../spinner/spinner';
@@ -6,12 +7,11 @@ import ErrorMessage from '../errorMessage/errorMessage';
 import PropTypes from 'prop-types';
 
 const CharList = (props) => {
-
     const [charList, setCharList] = useState([])
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [offset, setOffset] = useState(210)
     const [charEnded, setCharEnded] = useState(false)
-
+    const [inProp, setInProp] = useState(false);
 
     const { error, loading, getAllCharacters } = useMarvelService()
 
@@ -29,7 +29,7 @@ const CharList = (props) => {
 
     const onCharListLoaded = (newCharList) => {
         let ended = false
-        
+
         if (newCharList.length < 9) {
             ended = true
         }
@@ -38,38 +38,57 @@ const CharList = (props) => {
         setNewItemLoading(false)
         setOffset(offset => offset + 9)
         setCharEnded(charEnded => ended)
+        setInProp(true)
     }
 
-
     function renderItems(arr) {
-        const items = arr.map((item) => {
-            
-            return (
-                <li
-                    className="char__item"
-                    key={item.id}
-                    onClick={() => props.updateId(item.id)}>
-                    <img src={item.thumbnail} alt={item.name} style={item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? { objectFit: 'contain' } : null} />
-                    <div className="char__name">{item.name}</div>
-                </li>
-            )
-
-        });
         return (
             <ul className="char__grid">
-                {items}
+                <TransitionGroup component={null}>
+                    {arr.map(item => (
+                        <CSSTransition key={item.id} timeout={2000} classNames="animateChars" exit={false} >
+                            <li
+                                className="char__item"
+                                key={item.id}
+                                onClick={() => props.updateId(item.id)}>
+                                <img src={item.thumbnail} alt={item.name} style={item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? { objectFit: 'contain' } : null} />
+                                <div className="char__name">{item.name}</div>
+                            </li>
+                        </CSSTransition>
+                    ))}
+                </TransitionGroup>
             </ul>
         )
+        // const items = arr.map((item) => {
+
+        //     return (
+        //         <li
+        //             className="char__item"
+        //             key={item.id}
+        //             onClick={() => props.updateId(item.id)}>
+        //             <img src={item.thumbnail} alt={item.name} style={item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? { objectFit: 'contain' } : null} />
+        //             <div className="char__name">{item.name}</div>
+        //         </li>
+        //     )
+
+        // });
+        // return (
+        //     <ul className="char__grid">
+        //         {items}
+        //     </ul>
+        // )
     }
 
     const items = renderItems(charList);
     const errorMessage = error ? <ErrorMessage /> : null
     const spinner = loading && !newItemLoading ? <Spinner /> : null
-    
+
     if (loading) {
         import('./someFunc')
             .then(obj => obj.default())
     }
+
+
 
     return (
         <div className="char__list">
