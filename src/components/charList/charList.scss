@@ -16,9 +16,11 @@
 .char {
     &__content {
         margin-top: 50px;
-        display: grid;
+        // display: grid;
+        display: flex;
         grid-template-columns: 650px 425px;
         column-gap: 25px;
+        justify-content: space-around;
         align-items: start;
     }
 
