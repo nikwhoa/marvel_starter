@@ -1,64 +1,85 @@
-import { useHttp } from "../hooks/http.hook"
+import { useHttp } from '../hooks/http.hook';
 
 const useMarvelService = () => {
+    const { loading, request, error, clearError } = useHttp();
 
-    const {loading, request, error, clearError} = useHttp()
-
-    const _apiBase = 'https://gateway.marvel.com:443/v1/public/'
-    const _apiKey = 'apikey=bbdd95157486e54b3b7994bb52bb4218'
-    const _baseOffset = 210
+    const _apiBase = 'https://gateway.marvel.com:443/v1/public/';
+    const _apiKey = 'apikey=bbdd95157486e54b3b7994bb52bb4218';
+    const _baseOffset = 210;
 
     const searchForChar = async (input) => {
-        const res = await request(`${_apiBase}characters?name=${input}&${_apiKey}`)
-        console.log(input);
-        console.log(res);
-        // return res
-    }
+        if (input.length <= 2) {
+            return 'Please enter at least 3 characters';
+        } else {
+            const res = await request(
+                `${_apiBase}characters?name=${input}&${_apiKey}`
+            );
+
+            if (res.data.results.length < 1) {
+                return false;
+            } else {
+                return res.data.results[0];
+            }
+        }
+    };
 
     const getAllCharacters = async (offset = _baseOffset) => {
-        const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
-        return res.data.results.map(_transformCharacter)
-    }
+        const res = await request(
+            `${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`
+        );
+        return res.data.results.map(_transformCharacter);
+    };
     const getCharacter = async (id) => {
         const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
-        return _transformCharacter(res.data.results[0])
-    }
+        return _transformCharacter(res.data.results[0]);
+    };
 
     const _transformCharacter = (character) => {
-
-        let des = ''
+        let des = '';
 
         if (character.description.length > 150) {
-            des = character.description.slice(0, 150) + '...'
+            des = character.description.slice(0, 150) + '...';
         }
 
         return {
             id: character.id,
             name: character.name,
             description: des,
-            thumbnail: character.thumbnail.path + '.' + character.thumbnail.extension,
+            thumbnail:
+                character.thumbnail.path + '.' + character.thumbnail.extension,
             homepage: character.urls[0].url,
             wiki: character.urls[1].url,
-            comics: character.comics.items.map((item, i) => i < 9 ? item.name : null)
-        }
-    }
+            comics: character.comics.items.map((item, i) =>
+                i < 9 ? item.name : null
+            ),
+        };
+    };
 
     const getComics = async (offset = 300) => {
-        const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`)
-        const comics = res.data.results
+        const res = await request(
+            `${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`
+        );
+        const comics = res.data.results;
 
-        return comics
-    }
+        return comics;
+    };
 
     const getComic = async (id) => {
-        const res = await request(`${_apiBase}comics/${id}?${_apiKey}`)
-        const comic = res.data.results[0]
-        return comic
-    }
+        const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+        const comic = res.data.results[0];
+        return comic;
+    };
 
-
-
-    return {loading, error, searchForChar, getAllCharacters, getCharacter, clearError, getComics, getComic}
-}
+    return {
+        loading,
+        error,
+        searchForChar,
+        getAllCharacters,
+        getCharacter,
+        clearError,
+        getComics,
+        getComic,
+    };
+};
 
 export default useMarvelService;

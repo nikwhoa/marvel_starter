@@ -1,4 +1,4 @@
-import { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
@@ -9,13 +9,14 @@ import './charInfo.scss';
 import Skeleton from '../skeleton/Skeleton';
 
 const CharInfo = (props) => {
-    
+
     const [char, setChar] = useState(null)
-    
+
     const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar(props.charId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.charId])
 
 
@@ -23,14 +24,14 @@ const CharInfo = (props) => {
         setChar(char)
     }
 
-    
+
 
     const updateChar = (id) => {
         clearError()
         if (!id) {
             return
         }
-        
+
         getCharacter(id).then(onCharLoaded)
     }
 

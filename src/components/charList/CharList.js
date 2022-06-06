@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import useMarvelService from '../../services/MarvelService';
 import './charList.scss';
@@ -11,6 +11,7 @@ const CharList = (props) => {
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [offset, setOffset] = useState(210)
     const [charEnded, setCharEnded] = useState(false)
+    // eslint-disable-next-line no-unused-vars
     const [inProp, setInProp] = useState(false);
 
     const { error, loading, getAllCharacters } = useMarvelService()
@@ -18,6 +19,7 @@ const CharList = (props) => {
 
     useEffect(() => {
         onRequest(offset, true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -83,10 +85,10 @@ const CharList = (props) => {
     const errorMessage = error ? <ErrorMessage /> : null
     const spinner = loading && !newItemLoading ? <Spinner /> : null
 
-    if (loading) {
-        import('./someFunc')
-            .then(obj => obj.default())
-    }
+    // if (loading) {
+    //     import('./someFunc')
+    //         .then(obj => obj.default())
+    // }
 
 
 

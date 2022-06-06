@@ -1,7 +1,7 @@
 import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import xMen from '../../resources/img/x-men.png';
-import AppHeader from '../appHeader/AppHeader';
+// import uw from '../../resources/img/UW.png';
+// import xMen from '../../resources/img/x-men.png';
+// import AppHeader from '../appHeader/AppHeader';
 import CommicsBanner from './CommicsBanner';
 import useMarvelService from '../../services/MarvelService';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ const ComicsList = () => {
 
     useEffect(() => {
         onRequest(offset, true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onRequest = (offset, initial) => {
@@ -58,7 +59,7 @@ const ComicsList = () => {
     const items = renderItems(comics)
     const errorMessage = error ? <ErrorMessage /> : null
     const spinner = loading && !newItems ? <Spinner /> : null
-    
+
     return (
 
         <div className="comics__list app">

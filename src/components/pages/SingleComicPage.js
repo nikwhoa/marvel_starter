@@ -19,9 +19,10 @@ const SingleComicPage = () => {
 
     useEffect(() => {
         updateComic(comicID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [comicID])
 
-    
+
 
     const updateComic = (id) => {
         clearError()
@@ -41,7 +42,7 @@ const SingleComicPage = () => {
             {errorMessage}
             {spinner}
             {content}
-        </>    
+        </>
     )
 }
 
