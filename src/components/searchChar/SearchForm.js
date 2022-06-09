@@ -7,59 +7,61 @@ import { useEffect, useState } from 'react';
 const SearchForm = () => {
     const { searchForChar } = useMarvelService();
     const [foundCharacter, setCharacter] = useState(null);
-    const output = (foundCharacter) => {
-        if (foundCharacter === 'no found') {
-            return <div>No character found</div>;
-        } else if (foundCharacter === false) {
-            return <div>Please enter at least 3 characters</div>;
-        } else if (foundCharacter === null) {
-            return '';
-        } else {
-            return (
-                'Charater ' +
-                foundCharacter[0] +
-                ' found. To get more follow the link.'
-            );
+
+
+    const validate = (value) => {
+        let errorMessage;
+        if (/\d/g.test(value)) {
+            errorMessage = 'Please enter a valid name';
+        } else if (value.length <= 2) {
+            errorMessage = 'Please enter at least 3 characters';
         }
+        return errorMessage;
     };
 
     return (
-        <Formik
-            initialValues={{ search: '' }}
-            onSubmit={(values) => {
-                searchForChar(values.search).then((res) => {
-                    if (res === false) {
-                        setCharacter(false);
-                    } else if (res.length < 1) {
-                        setCharacter('no found');
-                    } else {
-                        const char = [
-                            res.name,
-                            res.description,
-                            res.thumbnail,
-                            res.id,
-                        ];
-                        setCharacter(char);
-                    }
-                });
-                // let result = searchForChar(values.search);
-                // console.log(searchForChar(values.search));
-                // setCharacter(result);
-            }}
-        >
-            <div className='search-form'>
-                <Form className='form'>
-                    <label htmlFor='search'>Or find a character by name:</label>
-                    <Field type='text' name='search' placeholder='Search...' />
-                    <button className='button button__main' type='submit'>
-                        <div className='inner'>find</div>
-                    </button>
-                </Form>
-                <div className='search-output'>
-                    <b>{output(foundCharacter)}</b>
-                </div>
+        <div className='search-form'>
+            <Formik
+                initialValues={{ search: '' }}
+                onSubmit={(value) => {
+                    searchForChar(value.search).then((res) => {
+                        if (res) {
+                            setCharacter(res);
+                        } else {
+                            setCharacter(false)
+                        }
+                    });
+                }}
+            >
+                {({ errors, touched, validateForm }) => (
+                    <Form>
+                        <label htmlFor='search'>
+                            Find a character by name:
+                        </label>
+                        <Field
+                            name='search'
+                            type='text'
+                            validate={validate}
+                            placeholder='Search...'
+                        />
+                        {errors.search && touched.search && (
+                            <span className='search-error'>
+                                {errors.search}
+                            </span>
+                        )}
+                        <button className='button button__main' type='submit'>
+                            <div className='inner'>find</div>
+                        </button>
+                    </Form>
+                )}
+            </Formik>
+
+            <div className='search-output'>
+                {foundCharacter === false ? <div>No found</div> : (
+                    foundCharacter ? <>Charater {foundCharacter.name} found. To get more info click the link</> : null
+                )}
             </div>
-        </Formik>
+        </div>
     );
 };
 

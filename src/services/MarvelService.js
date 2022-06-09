@@ -8,18 +8,19 @@ const useMarvelService = () => {
     const _baseOffset = 210;
 
     const searchForChar = async (input) => {
-        if (input.length <= 2) {
-            return 'Please enter at least 3 characters';
-        } else {
-            const res = await request(
-                `${_apiBase}characters?name=${input}&${_apiKey}`
-            );
+        const res = await request(
+            `${_apiBase}characters?name=${input}&${_apiKey}`
+        );
 
-            if (res.data.results.length < 1) {
-                return false;
-            } else {
-                return res.data.results[0];
+        if (res.data.total >= 1) {
+            return {
+                name: res.data.results[0].name,
+                id: res.data.results[0].id,
+                description: res.data.results[0].description,
+                thumbnail: res.data.results[0].thumbnail.path,
             }
+        } else {
+            return false;
         }
     };
 

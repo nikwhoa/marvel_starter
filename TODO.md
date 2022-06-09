@@ -1,0 +1,1 @@
+1. create character page based on search result
