@@ -22,6 +22,14 @@
     button {
         margin: 10px 0;
     }
+    .link {
+        // text-decoration: underline;
+        color: blue;
+        font-weight: bold;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 .search-error {
     display: inline-block;

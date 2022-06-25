@@ -3,10 +3,19 @@ import { Formik, Form, Field } from 'formik';
 import useMarvelService from '../../services/MarvelService';
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from 'react';
+import {CharPage, gettingChar} from '../pages/CharPage';
+import { Link } from 'react-router-dom';
 
 const SearchForm = () => {
     const { searchForChar } = useMarvelService();
     const [foundCharacter, setCharacter] = useState(null);
+
+    const getChar = gettingChar;
+
+    useEffect(() => {
+        getChar(foundCharacter);
+    }, [foundCharacter]);
+
 
 
     const validate = (value) => {
@@ -58,7 +67,7 @@ const SearchForm = () => {
 
             <div className='search-output'>
                 {foundCharacter === false ? <div>No found</div> : (
-                    foundCharacter ? <>Charater {foundCharacter.name} found. To get more info click the link</> : null
+                    foundCharacter ? <>Charater {foundCharacter.name} found. To get more info click  <Link className='link' to={'/chars/'+foundCharacter.name}>the link</Link></> : null
                 )}
             </div>
         </div>
