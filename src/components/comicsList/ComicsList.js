@@ -9,69 +9,87 @@ import ErrorMessage from '../errorMessage/errorMessage';
 import Spinner from '../spinner/spinner';
 import { Link } from 'react-router-dom';
 
+const setContent = (proccess, Component, newItemLoading) => {
+    console.log(proccess);
+    switch (proccess) {
+        case 'waiting':
+            return <Spinner />;
+
+        case 'loading':
+            return newItemLoading ? <Component /> : <Spinner />;
+
+        case 'error':
+            return <ErrorMessage />;
+
+        case 'confirmed':
+            return <Component />;
+
+        default:
+            throw new Error('Unknown proccess state');
+    }
+};
+
 const ComicsList = () => {
+    const [comics, setComics] = useState([]);
+    const [offset, setOffset] = useState(300);
+    const [newItems, setNewItems] = useState(false);
 
-    const [comics, setComics] = useState([])
-    const [offset, setOffset] = useState(300)
-    const [newItems, setNewItems] = useState(false)
-
-
-    const { loading, error, getComics } = useMarvelService();
+    const { loading, error, getComics, proccess, setProccess } =
+        useMarvelService();
 
     useEffect(() => {
-        onRequest(offset, true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        onRequest(offset, true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onRequest = (offset, initial) => {
-        initial ? setNewItems(false) : setNewItems(true)
-        getComics(offset).then(onComicsLoaded)
-    }
+        initial ? setNewItems(false) : setNewItems(true);
+        getComics(offset)
+            .then(onComicsLoaded)
+            .then(() => setProccess('confirmed'));
+    };
 
     const onComicsLoaded = (newComics) => {
-        setComics(comics => [...comics, ...newComics])
-        setNewItems(false)
-        setOffset(offset + 8)
-    }
-
+        setComics((comics) => [...comics, ...newComics]);
+        setNewItems(false);
+        setOffset(offset + 8);
+    };
 
     function renderItems(arr) {
         const items = arr.map((item, i) => {
             return (
-                <li key={item.title + '_' + i} className="comics__item">
+                <li key={item.title + '_' + i} className='comics__item'>
                     {/* href={item.urls[0].url} */}
-                    <Link to={`/comics/${item.id}`} >
-                        <img src={item.thumbnail.path + '.jpg'} alt="ultimate war" className="comics__item-img" />
-                        <div className="comics__item-name">{item.title}</div>
-                        <div className="comics__item-price">{item.prices[0].price}$</div>
+                    <Link to={`/comics/${item.id}`}>
+                        <img
+                            src={item.thumbnail.path + '.jpg'}
+                            alt='ultimate war'
+                            className='comics__item-img'
+                        />
+                        <div className='comics__item-name'>{item.title}</div>
+                        <div className='comics__item-price'>
+                            {item.prices[0].price}$
+                        </div>
                     </Link>
                 </li>
-            )
-        })
+            );
+        });
 
-        return (
-            <ul className="comics__grid">
-                {items}
-            </ul>
-        )
+        return <ul className='comics__grid'>{items}</ul>;
     }
 
-    const items = renderItems(comics)
-    const errorMessage = error ? <ErrorMessage /> : null
-    const spinner = loading && !newItems ? <Spinner /> : null
-
     return (
-
-        <div className="comics__list app">
+        <div className='comics__list app'>
             <CommicsBanner />
-            {errorMessage}
-            {spinner}
-            {items}
-            <button onClick={() => onRequest(offset)} className="button button__main button__long">
-                <div className="inner">load more</div>
+            {setContent(proccess, () => renderItems(comics), newItems)}
+            <button
+                onClick={() => onRequest(offset)}
+                className='button button__main button__long'
+            >
+                <div className='inner'>load more</div>
             </button>
         </div>
-    )
-}
+    );
+};
 
 export default ComicsList;
