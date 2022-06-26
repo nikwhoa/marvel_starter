@@ -1,1 +1,1 @@
-- create character page based on search result
+- create one page for comics and characters

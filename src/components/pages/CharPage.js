@@ -1,4 +1,6 @@
 import './charPage.scss';
+import { Helmet } from 'react-helmet';
+
 
 let character = {}
 const gettingChar = (char) => {
@@ -6,9 +8,12 @@ const gettingChar = (char) => {
 };
 
 const CharPage = (props) => {
-    console.log(character.description.length);
+
     return (
         <div className='char-wrapper'>
+            <Helmet>
+                <title>{character.name}</title>
+            </Helmet>
             <h1>{character.name}</h1>
             <img src={character.thumbnail+'.jpg'} alt={character.name} />
             <p>{character.description.length !== 0 ? character.description : 'Sorry no description' }</p>
