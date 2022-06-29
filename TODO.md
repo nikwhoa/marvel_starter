@@ -1,1 +1,1 @@
-- create one page for comics and characters
+- create one page for comics and characters (maybe don't need to do)
