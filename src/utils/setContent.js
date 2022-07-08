@@ -3,7 +3,7 @@ import Spinner from '../components/spinner/spinner';
 import ErrorMessage from '../components/errorMessage/errorMessage';
 
 const setContent = (proccess, Component, data) => {
-    console.log(proccess);
+
     switch (proccess) {
         case 'waiting':
             return <Skeleton />;

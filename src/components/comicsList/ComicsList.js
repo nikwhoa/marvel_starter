@@ -10,7 +10,7 @@ import Spinner from '../spinner/spinner';
 import { Link } from 'react-router-dom';
 
 const setContent = (proccess, Component, newItemLoading) => {
-    console.log(proccess);
+
     switch (proccess) {
         case 'waiting':
             return <Spinner />;
@@ -34,7 +34,7 @@ const ComicsList = () => {
     const [offset, setOffset] = useState(300);
     const [newItems, setNewItems] = useState(false);
 
-    const { loading, error, getComics, proccess, setProccess } =
+    const { getComics, proccess, setProccess } =
         useMarvelService();
 
     useEffect(() => {

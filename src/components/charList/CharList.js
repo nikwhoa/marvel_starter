@@ -7,7 +7,7 @@ import ErrorMessage from '../errorMessage/errorMessage';
 import PropTypes from 'prop-types';
 
 const setContent = (proccess, Component, newItemLoading) => {
-    console.log(proccess);
+    // console.log(proccess);
     switch (proccess) {
         case 'waiting':
             return <Spinner />;

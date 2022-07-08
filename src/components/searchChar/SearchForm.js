@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import useMarvelService from '../../services/MarvelService';
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from 'react';
-import {CharPage, gettingChar} from '../pages/CharPage';
+import {gettingChar} from '../pages/CharPage';
 import { Link } from 'react-router-dom';
 
 const SearchForm = () => {
@@ -14,6 +14,7 @@ const SearchForm = () => {
 
     useEffect(() => {
         getChar(foundCharacter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [foundCharacter]);
 
 
